@@ -3,11 +3,16 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/divyathakkar3112/Library/models"
 	"github.com/divyathakkar3112/Library/services"
 )
+
+func HomePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Welcome to Library")
+}
 
 func CreateUsers(w http.ResponseWriter, r *http.Request) {
 	var userReq models.User
@@ -34,6 +39,22 @@ func CreateUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&resp)
 }
 
-func HomePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to Library")
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	var resp models.Response
+	userData, err := services.GetAllUsersData()
+	if err != nil {
+		log.Printf("Error getting all users")
+		resp.Status = http.StatusInternalServerError
+		resp.Message = "Error getting Data"
+		resp.Data = userData
+	} else {
+		log.Printf("Data fetched successfully")
+		resp.Status = http.StatusOK
+		resp.Message = "Data fetched successfullly"
+		resp.Data = userData
+	}
+
+	w.Header().Set("contents-Type", "application/json")
+	w.WriteHeader(resp.Status)
+	json.NewEncoder(w).Encode(&resp)
 }

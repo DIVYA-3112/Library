@@ -15,7 +15,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/home", handlers.HomePage).Methods("GET")
 	r.HandleFunc("/users", handlers.CreateUsers).Methods("POST")
-	// r.HandleFunc("/users", getUser).Methods("GET")
+	r.HandleFunc("/users", handlers.GetAllUsers).Methods("GET")
 
 	http.ListenAndServe(":8000", r)
 }
