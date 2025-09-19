@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	InsertUserQuery = `insert into Users (name, email) values (?, ?)`
+	InsertUserQuery  = `insert into Users (name, email) values (?, ?)`
+	GetAllUsersQuery = `select * from Users`
 )
 
 func InsertUser(user models.User) (bool, error) {
@@ -37,4 +38,33 @@ func InsertUser(user models.User) (bool, error) {
 	result := fmt.Sprintf("Last inserted - %v \nRows Affected - %v", lastInserted, rowsAffected)
 	fmt.Println(result)
 	return true, nil
+}
+
+func GetAllUsers() ([]models.User, error) {
+	db.Init()
+	var users []models.User
+	stmt, err := db.DB.Prepare(GetAllUsersQuery)
+	if err != nil {
+		log.Printf("Prepare Error - %v", err.Error())
+		return users, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Query()
+	if err != nil {
+		log.Printf("Execution Error - %v", err.Error())
+		return users, err
+	}
+	defer res.Close()
+
+	for res.Next() {
+		var user models.User
+		err := res.Scan(&user.Id, &user.Name, &user.Email)
+		if err != nil {
+			log.Printf("Scanning Error - %v", err.Error())
+			return users, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
