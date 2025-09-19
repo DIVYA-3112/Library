@@ -25,13 +25,16 @@ func InsertUser(user models.User) (bool, error) {
 	defer stmt.Close()
 
 	// execute query
-
 	res, err := stmt.Exec(user.Name, user.Email)
 	if err != nil {
 		log.Printf("Exec Error - %v", err.Error())
 		return false, err
 	}
 
-	fmt.Println(res)
+	lastInserted, _ := res.LastInsertId()
+	rowsAffected, _ := res.RowsAffected()
+
+	result := fmt.Sprintf("Last inserted - %v \nRows Affected - %v", lastInserted, rowsAffected)
+	fmt.Println(result)
 	return true, nil
 }
