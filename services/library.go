@@ -2,13 +2,10 @@ package services
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/divyathakkar3112/Library/models"
 	"github.com/divyathakkar3112/Library/repository"
 )
-
-var users []models.User
 
 func CreateUser(user models.User) bool {
 	// insert user
@@ -22,9 +19,5 @@ func CreateUser(user models.User) bool {
 }
 
 func GetAllUsersData() ([]models.User, error) {
-	userData, err := repository.GetAllUsers()
-	if err != nil {
-		log.Printf("Error Getting All users data in svc")
-	}
-	return userData, err
+	return repository.GetAllUsers()
 }
