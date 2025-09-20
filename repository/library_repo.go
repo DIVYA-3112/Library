@@ -14,8 +14,6 @@ const (
 )
 
 func InsertUser(user models.User) (bool, error) {
-	// create db conn
-	db.Init()
 
 	// prepare query
 	stmt, err := db.DB.Prepare(InsertUserQuery)
@@ -41,7 +39,6 @@ func InsertUser(user models.User) (bool, error) {
 }
 
 func GetAllUsers() ([]models.User, error) {
-	db.Init()
 	var users []models.User
 	stmt, err := db.DB.Prepare(GetAllUsersQuery)
 	if err != nil {

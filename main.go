@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/divyathakkar3112/Library/db"
 	"github.com/divyathakkar3112/Library/handlers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 	fmt.Println("Starting Library")
-
+	db.Init()
 	// writing api
 	r := mux.NewRouter()
 	r.HandleFunc("/home", handlers.HomePage).Methods("GET")
